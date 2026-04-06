@@ -1,6 +1,4 @@
-// script.js - A Vanilla JS CRUD logika
-
-// 1. A nyers adatbázisod (film.txt alapján, az első kb. 15 filmmel, hogy átlátható legyen)
+// 1. A nyers adatbázisod (film.txt alapján, az első kb. 15 filmmel
 const nyersFilmAdatok = `1	Csókolj meg, édes!	1932	67
 2	Repülő arany	1932	48
 3	Piri mindent tud	1932	92
@@ -12,15 +10,13 @@ const nyersFilmAdatok = `1	Csókolj meg, édes!	1932	67
 9	Havi 200 fix	1936	86
 10	Szerelemből nősültem	1937	67`;
 
-// Itt tároljuk a filmeket (ez a mi "adatbázisunk" a memóriában)
 let filmekTomb = [];
 
-// 2. Beolvasó függvény: Feldolgozza a nyers szöveget és beteszi a tömbbe
 function adatokBeolvasasa() {
-    const sorok = nyersFilmAdatok.split('\n'); // Szétszedjük sorokra
+    const sorok = nyersFilmAdatok.split('\n');
     for (let sor of sorok) {
         if (sor.trim() !== '') {
-            const adatok = sor.split('\t'); // Szétszedjük a tabulátorok mentén
+            const adatok = sor.split('\t'); 
             filmekTomb.push({
                 id: parseInt(adatok[0]),
                 cim: adatok[1],
@@ -31,10 +27,9 @@ function adatokBeolvasasa() {
     }
 }
 
-// 3. READ: Megjeleníti a filmeket a táblázatban
 function tablaKirajzolasa() {
     const tbody = document.getElementById('film-tabla-body');
-    tbody.innerHTML = ''; // Kiürítjük a régi tartalmat
+    tbody.innerHTML = ''; 
 
     for (let film of filmekTomb) {
         const tr = document.createElement('tr');
@@ -52,22 +47,20 @@ function tablaKirajzolasa() {
     }
 }
 
-// 4. CREATE & UPDATE: Mentés gomb logikája
+// 4. CREATE & UPDATE
 function mentes() {
     const idInput = document.getElementById('film-id').value;
     const cim = document.getElementById('film-cim').value;
     const ev = parseInt(document.getElementById('film-ev').value);
     const hossz = parseInt(document.getElementById('film-hossz').value);
 
-    // Bemenet ellenőrzése
     if (cim === '' || isNaN(ev) || isNaN(hossz)) {
         alert("Kérlek tölts ki minden mezőt helyesen!");
         return;
     }
 
     if (idInput === '') {
-        // --- CREATE: Új film hozzáadása ---
-        // Megkeressük a legnagyobb ID-t, és ahhoz adunk egyet
+
         let maxId = 0;
         for (let f of filmekTomb) {
             if (f.id > maxId) maxId = f.id;
@@ -75,7 +68,6 @@ function mentes() {
         
         filmekTomb.push({ id: maxId + 1, cim: cim, ev: ev, hossz: hossz });
     } else {
-        // --- UPDATE: Meglévő film módosítása ---
         const id = parseInt(idInput);
         const index = filmekTomb.findIndex(f => f.id === id);
         if (index !== -1) {
@@ -89,7 +81,6 @@ function mentes() {
     tablaKirajzolasa();
 }
 
-// UPDATE (Előkészítés): Betölti a kiválasztott film adatait az űrlapba
 function szerkesztesBetoltese(id) {
     const film = filmekTomb.find(f => f.id === id);
     if (film) {
@@ -100,17 +91,13 @@ function szerkesztesBetoltese(id) {
         document.getElementById('film-hossz').value = film.hossz;
     }
 }
-
-// 5. DELETE: Film törlése
 function torles(id) {
     if (confirm("Biztosan törölni szeretnéd ezt a filmet?")) {
-        // Kiszűrjük azt az egy filmet, amit törölni akarunk
         filmekTomb = filmekTomb.filter(f => f.id !== id);
         tablaKirajzolasa();
     }
 }
 
-// Segédfüggvény: Kiüríti a beviteli mezőket
 function urlapTorles() {
     document.getElementById('form-title').innerText = "Új film hozzáadása";
     document.getElementById('film-id').value = '';
@@ -120,7 +107,6 @@ function urlapTorles() {
 }
 
 // PROGRAM INDÍTÁSA
-// Amikor betöltődik az oldal, beolvassuk az adatokat és kirajzoljuk a táblázatot
 window.onload = function() {
     adatokBeolvasasa();
     tablaKirajzolasa();
